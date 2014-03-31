@@ -39,9 +39,9 @@ directory "/etc/ganglia"
 udp_send_channel = node[:ganglia][:udp_send_channel].map do |udpsch|
   # Fill it with default values
   temp_udpsch = {
-    :mcast_join => node[:ganglia][:gmond][:mcast_join],
-    :ttl => node[:ganglia][:gmond][:ttl],
-    :port => node[:ganglia][:gmond][:port]
+    "mcast_join" => node[:ganglia][:gmond][:mcast_join],
+    "ttl" => node[:ganglia][:gmond][:ttl],
+    "port" => node[:ganglia][:gmond][:port]
   }
   # Merge with node attributes
   temp_udpsch.merge!(udpsch)
@@ -65,8 +65,8 @@ end
 udp_recv_channel = node[:ganglia][:udp_recv_channel].map do |udprch|
   # Fill it with default values
   temp_udprch = {
-    :mcast_join => node[:ganglia][:gmond][:mcast_join],
-    :port => node[:ganglia][:gmond][:port]
+    "mcast_join" => node[:ganglia][:gmond][:mcast_join],
+    "port" => node[:ganglia][:gmond][:port]
   }
   # Merge with node attributes
   temp_udprch.merge!(udprch)
