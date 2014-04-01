@@ -38,7 +38,11 @@
 
 # data_source begin
 <% @clusters.each do |c| -%>
+<% if c[:collector].kind_of?(Array) -%>
+data_source "<%= c[:name] %>" <%- c[:collector].each do |cl| -%><%= cl -%> <%- end %>
+<% else %>
 data_source "<%= c[:name] %>" <%= c[:collector] %>
+<% end -%>
 <% end -%>
 # data_source end
 

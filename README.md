@@ -142,7 +142,7 @@ And "override_attrubutes" includes
         "grid_name": <name-of-the-grid>",
         "clusters": [
             { "name": <name-of-cluster-1>, "collector": <collector-of-cluster-1> },
-            { "name": <name-of-cluster-2>, "collector": <collector-of-cluster-2> },
+            { "name": <name-of-cluster-2>, "collector": [ <collector-of-cluster-2>, <another-collector-of-cluster-2> ] },
             ...
         ],
     }
