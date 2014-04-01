@@ -65,7 +65,6 @@ end
 udp_recv_channel = node[:ganglia][:udp_recv_channel].map do |udprch|
   # Fill it with default values
   temp_udprch = {
-    "mcast_join" => node[:ganglia][:gmond][:mcast_join],
     "port" => node[:ganglia][:gmond][:port]
   }
   # Merge with node attributes
