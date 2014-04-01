@@ -39,17 +39,17 @@ directory "/etc/ganglia"
 udp_send_channel = node[:ganglia][:udp_send_channel].map do |udpsch|
   # Fill it with default values
   temp_udpsch = {
-    "mcast_join" => node[:ganglia][:gmond][:mcast_join],
-    "ttl" => node[:ganglia][:gmond][:ttl],
-    "port" => node[:ganglia][:gmond][:port]
+    'mcast_join' => node[:ganglia][:gmond][:mcast_join],
+    'ttl' => node[:ganglia][:gmond][:ttl],
+    'port' => node[:ganglia][:gmond][:port]
   }
   # Merge with node attributes
   temp_udpsch.merge!(udpsch)
 
   if temp_udpsch.has_key?(:host) || temp_udpsch.has_key?('host')
     # Remove multicast options when using unicast
-    temp_udpsch.delete(:mcast_join)
-    temp_udpsch.delete(:mcast_if) if temp_udpsch[:mcast_if]
+    temp_udpsch.delete('mcast_join')
+    temp_udpsch.delete('mcast_if') if temp_udpsch['mcast_if']
   end
   temp_udpsch
 end
