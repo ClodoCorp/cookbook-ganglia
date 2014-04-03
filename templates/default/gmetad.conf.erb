@@ -124,8 +124,8 @@ gridname "<%= @grid_name %>"
 # Riemann transport
 
 <% if @riemann['server'] != '' -%>
-riemann_server = "<%= @riemann['server'] -%>"
-riemann_port = <%= @riemann['port'] -%>
-riemann_protocol = <%= @riemann['protocol'] -%>
-riemann_attributes = "<%= @riemann['attributes'] -%>"
+riemann_server = "<%= @riemann['server'] %>"
+riemann_port = <%= @riemann['port'] %>
+riemann_protocol = <%= @riemann['protocol'] %>
+riemann_attributes = "<%= @riemann['attributes'] %>"
 <% end %>
