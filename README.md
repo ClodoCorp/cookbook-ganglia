@@ -11,7 +11,7 @@ http://ganglia.sourceforge.net/
 
 # USAGE:
 
-A run list with "recipe[[ganglia]]" enables monitoring.
+A run list with "recipe[ganglia]" enables monitoring.
 
 A run list with "recipe[ganglia::gmetad]" enables the gmetad collector.
 
