@@ -120,3 +120,12 @@ gridname "<%= @grid_name %>"
 # Where gmetad stores its round-robin databases
 # default: "/var/lib/ganglia/rrds"
 # rrd_rootdir "/some/other/place"
+
+# Riemann transport
+
+<% if @riemann['server'] != '' -%>
+riemann_server = "<%= @riemann['server'] -%>"
+riemann_port = <%= @riemann['port'] -%>
+riemann_protocol = <%= @riemann['protocol'] -%>
+riemann_attributes = "<%= @riemann['attributes'] -%>"
+<% end %>

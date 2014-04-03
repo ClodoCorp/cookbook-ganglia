@@ -21,3 +21,7 @@ default[:ganglia][:udp_recv_channel] = []
 default[:ganglia][:tcp_accept_channel] = []
 default[:ganglia][:override_hostname] = node['fqdn']
 default[:ganglia][:override_ip] = false
+default[:ganglia][:riemann][:server] = ""
+default[:ganglia][:riemann][:port] = "5555"
+default[:ganglia][:riemann][:protocol] = "udp"
+default[:ganglia][:riemann][:attributes] = ""
