@@ -153,7 +153,7 @@ the name of the grid (the set of clusters, together is called a grid). The
 `clusters` field provide information about the names of the clusters and their
 corrsponding collection hosts.
 
-## Riemann integration (ganglia >= 3.7.0)
+### Riemann integration (ganglia >= 3.7.0)
 
 To enable sending metrics from gmetad to riemann override attributes^
 
