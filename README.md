@@ -153,6 +153,21 @@ the name of the grid (the set of clusters, together is called a grid). The
 `clusters` field provide information about the names of the clusters and their
 corrsponding collection hosts.
 
+## Riemann integration (ganglia >= 3.7.0)
+
+To enable sending metrics from gmetad to riemann override attributes^
+
+    "ganglia": {
+        "riemann": {
+            "server": "rieman.example.com",
+            "port": "5555",
+            "protocol": "udp",
+            "attributes": "customer=Acme Corp,environment=PROD"
+        }
+    }
+
+"protocol" defaults to udp, "port" to 5555.
+
 # LWRP:
 
 ## gmetric
