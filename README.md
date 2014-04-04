@@ -155,7 +155,7 @@ corrsponding collection hosts.
 
 ### Riemann integration (ganglia >= 3.7.0)
 
-To enable sending metrics from gmetad to riemann override attributes^
+To enable sending metrics from gmetad to riemann override attributes:
 
     "ganglia": {
         "riemann": {
@@ -167,6 +167,23 @@ To enable sending metrics from gmetad to riemann override attributes^
     }
 
 "protocol" defaults to udp, "port" to 5555.
+
+### Graphite (carbon) integration
+
+To enable sending metrics from gmetad to carbon, override attributes:
+
+    "ganglia": {
+        "crbon": {
+            "server": "carbon.example.com",
+            "port": "2003",
+            "protocol": "udp",
+            "timeout": "500",
+            "graphite_path": "z1.dev.clodo.ru.%s.%h.%m"
+        }
+    }
+
+"protocol" defaults to udp, "port" to 2003, timeout to 500.
+
 
 # LWRP:
 

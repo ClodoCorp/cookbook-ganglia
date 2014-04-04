@@ -25,3 +25,9 @@ default[:ganglia][:riemann][:server] = ""
 default[:ganglia][:riemann][:port] = "5555"
 default[:ganglia][:riemann][:protocol] = "udp"
 default[:ganglia][:riemann][:attributes] = ""
+default[:ganglia][:carbon][:server] = ""
+default[:ganglia][:carbon][:port] = "2003"
+default[:ganglia][:carbon][:protocol] = "udp"
+default[:ganglia][:carbon][:timeout] = 500
+default[:ganglia][:carbon][:graphite_path] = ""
+
