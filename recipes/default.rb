@@ -35,29 +35,73 @@ end
 
 directory "/etc/ganglia"
 
-case node[:ganglia][:unicast]
-when true
-  if Chef::Config[:solo]
-    server_hosts = node[:ganglia][:server_addresses]
-  else
-    server_hosts = node[:ganglia][:server_addresses] || search(:node, "role:#{node[:ganglia][:server_role]} AND chef_environment:#{node.chef_environment}").map {|node| node[:ipaddress]}
+# Normalize udp_send_channels
+udp_send_channel = node[:ganglia][:udp_send_channel].map do |udpsch|
+  # Fill it with default values
+  temp_udpsch = {
+    'mcast_join' => node[:ganglia][:gmond][:mcast_join],
+    'ttl' => node[:ganglia][:gmond][:ttl],
+    'port' => node[:ganglia][:gmond][:port]
+  }
+  # Merge with node attributes
+  temp_udpsch.merge!(udpsch)
+
+  if temp_udpsch.has_key?(:host) || temp_udpsch.has_key?('host')
+    # Remove multicast options when using unicast
+    temp_udpsch.delete('mcast_join')
+    temp_udpsch.delete('mcast_if') if temp_udpsch['mcast_if']
   end
-  
-  if server_hosts.empty? 
-     server_hosts = [ "127.0.0.1" ]
-  end
-  template "/etc/ganglia/gmond.conf" do
-    source "gmond_unicast.conf.erb"
-    variables( :cluster_name => node[:ganglia][:cluster_name],
-               :server_hosts => server_hosts )
-    notifies :restart, "service[ganglia-monitor]"
-  end
-when false
-  template "/etc/ganglia/gmond.conf" do
-    source "gmond.conf.erb"
-    variables( :cluster_name => node[:ganglia][:cluster_name] )
-    notifies :restart, "service[ganglia-monitor]"
-  end
+  temp_udpsch
+end
+
+if udp_send_channel.empty?
+  udp_send_channel = [{:mcast_join => node[:ganglia][:gmond][:mcast_join],
+                       :port => node[:ganglia][:gmond][:port],
+                       :ttl => node[:ganglia][:gmond][:ttl]
+                      }]
+end
+
+# Normalize udp_recv_channels
+udp_recv_channel = node[:ganglia][:udp_recv_channel].map do |udprch|
+  # Fill it with default values
+  temp_udprch = {
+    "port" => node[:ganglia][:gmond][:port]
+  }
+  # Merge with node attributes
+  temp_udprch.merge!(udprch)
+  temp_udprch
+end
+
+if udp_recv_channel.empty?
+  udp_recv_channel = [{:mcast_join => node[:ganglia][:gmond][:mcast_join],
+                       :bind => node[:ganglia][:gmond][:mcast_join],
+                       :port => node[:ganglia][:gmond][:port]
+                      }]
+end
+
+# Normalize tcp_accept_channels
+tcp_accept_channel = node[:ganglia][:tcp_accept_channel].map do |tcpach|
+  # Fill it with default values
+  temp_tcpach = {
+    :port => node[:ganglia][:gmond][:port]
+  }
+  # Merge with node attributes
+  temp_tcpach.merge!(tcpach)
+  temp_tcpach
+end
+
+if tcp_accept_channel.empty?
+  tcp_accept_channel = [{:port => node[:ganglia][:gmond][:port]
+                      }]
+end
+
+template "/etc/ganglia/gmond.conf" do
+  source "gmond.conf.erb"
+  variables( :udp_send_channel => udp_send_channel,
+             :udp_recv_channel => udp_recv_channel,
+             :tcp_accept_channel => tcp_accept_channel
+            )
+  notifies :restart, "service[ganglia-monitor]"
 end
 
 service "ganglia-monitor" do

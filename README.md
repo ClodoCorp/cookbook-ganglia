@@ -9,19 +9,15 @@ http://ganglia.sourceforge.net/
 *   SELinux must be disabled on CentOS
 *   iptables must allow access to port 80
 
-
 # USAGE:
 
-A run list with "[recipe](http://ganglia)" enables monitoring.
+A run list with "recipe[ganglia]" enables monitoring.
 
+A run list with "recipe[ganglia::gmetad]" enables the gmetad collector.
 
-A run list with "[recipe](ganglia::gmetad)" enables the gmetad collector.
+A run list with "recipe[ganglia::web]" enables the web interface.
 
-
-A run list with "[recipe](ganglia::web)" enables the web interface.
-
-
-A run list with "[recipe](ganglia::graphite)" enables graphite graphs.
+A run list with "recipe[ganglia::graphite]" enables graphite graphs.
 
 # ATTRIBUTES:
 
@@ -146,7 +142,7 @@ And "override_attrubutes" includes
         "grid_name": <name-of-the-grid>",
         "clusters": [
             { "name": <name-of-cluster-1>, "collector": <collector-of-cluster-1> },
-            { "name": <name-of-cluster-2>, "collector": <collector-of-cluster-2> },
+            { "name": <name-of-cluster-2>, "collector": [ <collector-of-cluster-2>, <another-collector-of-cluster-2> ] },
             ...
         ],
     }
@@ -156,6 +152,38 @@ If openid based authentication is required on the host, the
 the name of the grid (the set of clusters, together is called a grid). The
 `clusters` field provide information about the names of the clusters and their
 corrsponding collection hosts.
+
+### Riemann integration (ganglia >= 3.7.0)
+
+To enable sending metrics from gmetad to riemann override attributes:
+
+    "ganglia": {
+        "riemann": {
+            "server": "rieman.example.com",
+            "port": "5555",
+            "protocol": "udp",
+            "attributes": "customer=Acme Corp,environment=PROD"
+        }
+    }
+
+"protocol" defaults to udp, "port" to 5555.
+
+### Graphite (carbon) integration
+
+To enable sending metrics from gmetad to carbon, override attributes:
+
+    "ganglia": {
+        "crbon": {
+            "server": "carbon.example.com",
+            "port": "2003",
+            "protocol": "udp",
+            "timeout": "500",
+            "graphite_path": "z1.dev.clodo.ru.%s.%h.%m"
+        }
+    }
+
+"protocol" defaults to udp, "port" to 2003, timeout to 500.
+
 
 # LWRP:
 
@@ -207,7 +235,7 @@ The content of 'options' will be passed to the templates
 
 # CAVEATS: 
 
-This cookbook has been tested on Ubuntu 10.04 and Centos 5.5.
+This cookbook has been tested on Debian 7.2, Ubuntu 10.04 and Centos 5.5.
 
 Search seems to takes a moment or two to index. You may need to converge again
 to see recently added nodes.

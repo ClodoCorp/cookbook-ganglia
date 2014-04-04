@@ -9,6 +9,11 @@ when "rhel", "fedora"
       "/etc/init.d/gmetad"
     not_if "test -f /etc/init.d/gmetad"
   end
+
+  link "/usr/sbin/gmetad" do
+    to "/usr/local/sbin/gmetad"
+  end
+
 end
 
 directory "/var/lib/ganglia/rrds" do
@@ -16,28 +21,17 @@ directory "/var/lib/ganglia/rrds" do
   recursive true
 end
 
-case node[:ganglia][:unicast]
-when true
-  template "/etc/ganglia/gmetad.conf" do
-    source "gmetad.conf.erb"
-    variables( {:grid_name => node[:ganglia][:grid_name],
-                :clusters => node[:ganglia][:clusters]})
-    notifies :restart, "service[gmetad]"
-  end
-  if node[:recipes].include? "iptables"
-    include_recipe "ganglia::iptables"
-  end
-when false
-  template "/etc/ganglia/gmetad.conf" do
-    source "gmetad.conf.erb"
-    variables({:clusters => node[:ganglia][:clusters],
-               :grid_name => node[:ganglia][:grid_name]})
-    notifies :restart, "service[gmetad]"
-  end
+template "/etc/ganglia/gmetad.conf" do
+  source "gmetad.conf.erb"
+  variables( {:grid_name => node[:ganglia][:grid_name],
+              :clusters => node[:ganglia][:clusters],
+              :riemann => node[:ganglia][:riemann],
+              :carbon => node[:ganglia][:carbon]})
+  notifies :restart, "service[gmetad]"
 end
 
-link "/usr/sbin/gmetad" do
-  to "/usr/local/sbin/gmetad"
+if node[:recipes].include? "iptables"
+  include_recipe "ganglia::iptables"
 end
 
 service "gmetad" do

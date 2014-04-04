@@ -38,7 +38,11 @@
 
 # data_source begin
 <% @clusters.each do |c| -%>
+<% if c[:collector].kind_of?(Array) -%>
+data_source "<%= c[:name] %>" <%- c[:collector].each do |cl| -%><%= cl -%> <%- end %>
+<% else %>
 data_source "<%= c[:name] %>" <%= c[:collector] %>
+<% end -%>
 <% end -%>
 # data_source end
 
@@ -116,3 +120,26 @@ gridname "<%= @grid_name %>"
 # Where gmetad stores its round-robin databases
 # default: "/var/lib/ganglia/rrds"
 # rrd_rootdir "/some/other/place"
+
+# Riemann transport
+
+<% if @riemann['server'] != '' -%>
+riemann_server "<%= @riemann['server'] %>"
+riemann_port <%= @riemann['port'] %>
+riemann_protocol <%= @riemann['protocol'] %>
+<% if @riemann['attributes'] != '' -%>
+riemann_attributes "<%= @riemann['attributes'] %>"
+<% end -%>
+<% end %>
+
+# Graphite (carbon) transport
+
+<% if @carbon['server'] != '' -%>
+carbon_server  "<%= @carbon['server'] %>"
+carbon_port <%= @carbon['port'] %>
+carbon_protocol <%= @carbon['protocol'] %>
+carbon_timeout <%= @carbon['timeout'] %>
+<%= @carbon['graphite_path'] != '' -%>
+graphite_path <%= @carbon['graphite_path'] %>
+<% end -%>
+<% end %>
