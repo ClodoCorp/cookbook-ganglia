@@ -139,7 +139,7 @@ carbon_server  "<%= @carbon['server'] %>"
 carbon_port <%= @carbon['port'] %>
 carbon_protocol <%= @carbon['protocol'] %>
 carbon_timeout <%= @carbon['timeout'] %>
-<%= @carbon['graphite_path'] != '' -%>
-graphite_path <%= @carbon['graphite_path'] %>
+<% if @carbon['graphite_path'] != '' -%>
+graphite_path "<%= @carbon['graphite_path'] %>"
 <% end -%>
 <% end %>
