@@ -109,6 +109,14 @@ modules {
     name = "sys_module"
     path = "/usr/lib/ganglia/modsys.so"
   }
+  module {
+    name = "smart_module"
+    path = "/usr/lib/ganglia/modsmart.so"
+    params = "An extra raw parameter"
+    param SmartctlPath {
+      value = "<%= node["ganglia"]["gmond"]["smartctl_path"] %>"
+    }
+  }
 }
 
 include ('/etc/ganglia/conf.d/*.conf')
@@ -171,6 +179,10 @@ collection_group {
   metric {
     name = "location"
     title = "Location"
+  }
+  metric {
+    name = "SMART_status"
+    title = "Overall smart status"
   }
 }
 
