@@ -83,7 +83,7 @@ end
 tcp_accept_channel = node[:ganglia][:tcp_accept_channel].map do |tcpach|
   # Fill it with default values
   temp_tcpach = {
-    :port => node[:ganglia][:gmond][:port]
+    "port" => node[:ganglia][:gmond][:port]
   }
   # Merge with node attributes
   temp_tcpach.merge!(tcpach)
@@ -91,7 +91,7 @@ tcp_accept_channel = node[:ganglia][:tcp_accept_channel].map do |tcpach|
 end
 
 if tcp_accept_channel.empty?
-  tcp_accept_channel = [{:port => node[:ganglia][:gmond][:port]
+  tcp_accept_channel = [{"port" => node[:ganglia][:gmond][:port]
                       }]
 end
 
