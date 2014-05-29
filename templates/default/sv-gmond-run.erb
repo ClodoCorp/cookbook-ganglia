@@ -1,0 +1,4 @@
+#!/bin/sh
+exec 2>&1
+exec <%= gmond %> --conf /etc/ganglia/gmond-<%= cluster %>.conf --pid-file /var/run/gmond-<%= cluster %>.pid -f
+
