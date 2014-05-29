@@ -40,6 +40,7 @@ if Chef::Config['solo'] && !node['ganglia']['allow_solo_search']
   addresses = []
 else
   addresses = search("network_interfaces__addresses:*")
+end
 
 node[:ganglia][:cluster_collectors].each do |cluster|
 
