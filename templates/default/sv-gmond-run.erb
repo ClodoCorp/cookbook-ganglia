@@ -1,4 +1,4 @@
 #!/bin/sh
 exec 2>&1
-exec <%= gmond %> --conf /etc/ganglia/gmond-<%= cluster %>.conf --pid-file /var/run/gmond-<%= cluster %>.pid -f
+exec <%= @options[:gmond_binary] %>  --conf /etc/ganglia/gmond-<%= @options[:cluster_name] %>.conf --pid-file /var/run/gmond-<%= @options[:cluster_name] %>.pid -f
 

@@ -35,18 +35,19 @@ end
 
 directory "/etc/ganglia"
 
-if Chef::Config['solo'] && !node['ganglia']['allow_solo_search']
-  Chef::Log.warn('This recipe uses search. Chef Solo does not support search.')
-  addresses = []
-else
-  addresses = search("network_interfaces__addresses:*")
+local_addresses = Array.new()
+node[:network][:interfaces].each_value do |iface|
+  iface.addresses.each_key do |addr|
+    local_addresses.push(addr)
+  end
 end
+
 
 node[:ganglia][:cluster_collectors].each do |cluster|
 
   bind_addr = Array.new()
   cluster[:collector].each do |addr|
-    if addresses.include?(addr)
+    if local_addresses.include?(addr)
       bind_addr.push(addr)
     end
   end
@@ -55,15 +56,18 @@ node[:ganglia][:cluster_collectors].each do |cluster|
     source "cluster.gmond.conf.erb"
     variables( :cluster_name => cluster[:name],
                :bind_addr =>  bind_addr,
-               :grid => node[:ganglia][:grid_name]
+               :grid_name => node[:ganglia][:grid_name]
               )
     notifies :restart, "service[gmond-#{cluster[:name]}]"
   end
 
-  service "gmond-#{cluster[:name]}" do
-    pattern "gmond"
-    supports :restart => true
-    action [ :enable, :start ]
+  runit_service "gmond-#{cluster[:name]}" do
+    run_template_name "gmond"
+    log_template_name "gmond"
+    options({
+              :cluster_name => cluster[:name],
+              :gmond_binary => "/usr/sbin/gmond"
+            })
   end
- 
+
 end
