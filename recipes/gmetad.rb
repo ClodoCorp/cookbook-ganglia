@@ -24,7 +24,7 @@ end
 template "/etc/ganglia/gmetad.conf" do
   source "gmetad.conf.erb"
   variables( {:grid_name => node[:ganglia][:grid_name],
-              :clusters => node[:ganglia][:cluster_collectors],
+              :clusters => node[:ganglia][:clusters],
               :riemann => node[:ganglia][:riemann],
               :carbon => node[:ganglia][:carbon]})
   notifies :restart, "service[gmetad]"
