@@ -51,16 +51,13 @@ node[:ganglia][:cluster_collectors].each do |cluster|
     end
   end
   
-  template "/etc/ganglia/gmond.conf" do
-    source "gmond.conf.erb"
-    variables( :udp_send_channel => udp_send_channel,
-               :udp_recv_channel => udp_recv_channel,
-               :tcp_accept_channel => tcp_accept_channel,
-               :cluster => cluster[:name],
+  template "/etc/ganglia/gmond-#{cluster[:name]}.conf" do
+    source "cluster.gmond.conf.erb"
+    variables( :cluster_name => cluster[:name],
                :bind_addr =>  bind_addr,
-               :grid => node[:ganglia]
+               :grid => node[:ganglia][:grid_name]
               )
-    notifies :restart, "gmond-#{cluster[:name]}"
+    notifies :restart, "service[gmond-#{cluster[:name]}]"
   end
 
   service "gmond-#{cluster[:name]}" do
@@ -68,5 +65,5 @@ node[:ganglia][:cluster_collectors].each do |cluster|
     supports :restart => true
     action [ :enable, :start ]
   end
-
+ 
 end
