@@ -43,7 +43,7 @@ node[:network][:interfaces].each_value do |iface|
 end
 
 
-node[:ganglia][:cluster_collectors].each do |cluster|
+node[:ganglia][:clusters].each do |cluster|
 
   bind_addr = Array.new()
   cluster[:collector].each do |addr|
