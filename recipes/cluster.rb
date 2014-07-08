@@ -51,6 +51,8 @@ node[:ganglia][:clusters].each do |cluster|
       bind_addr.push(addr)
     end
   end
+
+  service "gmond-#{cluster[:name]}"
   
   template "/etc/ganglia/gmond-#{cluster[:name]}.conf" do
     source "cluster.gmond.conf.erb"
@@ -58,16 +60,17 @@ node[:ganglia][:clusters].each do |cluster|
                :bind_addr =>  bind_addr,
                :grid_name => node[:ganglia][:grid_name]
               )
-    notifies :restart, "service[gmond-#{cluster[:name]}]"
+    notifies :restart, "service[gmond-#{cluster[:name]}]", :delayed
   end
 
-  runit_service "gmond-#{cluster[:name]}" do
-    run_template_name "gmond"
-    log_template_name "gmond"
-    options({
-              :cluster_name => cluster[:name],
-              :gmond_binary => "/usr/sbin/gmond"
-            })
+  template "/etc/init.d/gmond-#{cluster[:name]}" do
+    source "init.gmond.erb"
+    mode  "0755"
+    variables( :cluster_name => cluster[:name] )
+  end
+
+  service  "gmond-#{cluster[:name]}" do
+    action [:enable, :start]
   end
 
 end
