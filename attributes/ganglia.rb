@@ -17,6 +17,7 @@ default[:ganglia][:gmond][:mcast_join] = "239.2.11.71"
 default[:ganglia][:gmond][:port] = 8649
 default[:ganglia][:gmond][:ttl] = 1
 default[:ganglia][:gmond][:smartctl_path] = "/usr/sbin/smartctl"
+default[:ganglia][:gmond][:additional_modules] = []
 default[:ganglia][:udp_send_channel] = []
 default[:ganglia][:udp_recv_channel] = []
 default[:ganglia][:tcp_accept_channel] = []
