@@ -111,8 +111,8 @@ modules {
   }
 }
 
-<% node[:gmond][:additional_modules].each do mod -%>
-include ('/etc/ganglia/conf.d/<%= @mod %>.conf')
+<% node[:ganglia][:gmond][:additional_modules].each do |mod| -%>
+include ('/etc/ganglia/conf.d/<%= mod %>')
 <% end -%>
 
 /* The old internal 2.5.x metric array has been replaced by the following
