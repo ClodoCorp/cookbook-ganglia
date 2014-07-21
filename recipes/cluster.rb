@@ -66,7 +66,8 @@ node[:ganglia][:clusters].each do |cluster|
   template "/etc/init.d/gmond-#{cluster[:name]}" do
     source "init.gmond.erb"
     mode  "0755"
-    variables( :cluster_name => cluster[:name] )
+    variables( :cluster_name => cluster[:name],
+               :instance_name => "gmond-#{cluster[:name]}" )
   end
 
   service  "gmond-#{cluster[:name]}" do

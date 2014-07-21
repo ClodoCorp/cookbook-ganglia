@@ -20,6 +20,14 @@
 case node[:platform_family]
 when "debian"
   package "ganglia-monitor"
+
+  template "/etc/init.d/ganglia-monitor" do
+    source "init.gmond.erb"
+    mode  "0755"
+    variables( :cluster_name => "",
+               :instance_name => "ganglia-monitor" )
+  end
+
 when "rhel","fedora"
   include_recipe "ganglia::source"
 

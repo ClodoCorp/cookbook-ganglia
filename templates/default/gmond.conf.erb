@@ -111,8 +111,9 @@ modules {
   }
 }
 
-<% node[:ganglia][:gmond][:additional_modules].each do |mod| -%>
-include ('/etc/ganglia/conf.d/<%= mod %>')
+include ('/etc/ganglia/conf.d/modpython.conf')
+<% node[:monitoring][:metric_list].each do |mod| -%>
+include ('/etc/ganglia/conf.d/<%= mod %>.conf')
 <% end -%>
 
 /* The old internal 2.5.x metric array has been replaced by the following

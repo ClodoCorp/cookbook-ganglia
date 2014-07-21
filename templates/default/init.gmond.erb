@@ -1,6 +1,6 @@
 #! /bin/sh
 ### BEGIN INIT INFO
-# Provides:          gmond-<%= @cluster_name %>
+# Provides:          <%= @instance_name %>
 # Required-Start:    $network $named $remote_fs $syslog
 # Required-Stop:     $network $named $remote_fs $syslog
 # Default-Start:     2 3 4 5
@@ -8,9 +8,13 @@
 ### END INIT INFO 
 PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
 DAEMON=/usr/sbin/gmond
-NAME="gmond-<%= @cluster_name %>"
-PIDFILE="/var/run/gmond-<%= @cluster_name %>.pid"
-DESC="Ganglia Monitor Daemon for cluster <%= @cluster_name %>"
+<% if @cluster_name == "" %>
+NAME="gmond"
+<% else %>
+NAME="<%= @instance_name %>"
+<% end %>
+PIDFILE="/var/run/${NAME}.pid"
+DESC="Ganglia Monitor Daemon for ${NAME}"
 
 test -x $DAEMON || exit 0
 
