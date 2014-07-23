@@ -111,7 +111,13 @@ modules {
   }
 }
 
-include ('/etc/ganglia/conf.d/modpython.conf')
+modules {
+  module {
+    name = "python_module"
+    path = "/usr/lib/ganglia/modpython.so"
+    params = "/usr/lib/ganglia/python_modules"
+  }
+}
 <% node[:monitoring][:metric_list].each do |mod| -%>
 include ('/etc/ganglia/conf.d/<%= mod %>.conf')
 <% end -%>
