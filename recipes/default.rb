@@ -109,7 +109,7 @@ template "/etc/ganglia/gmond.conf" do
              :udp_recv_channel => udp_recv_channel,
              :tcp_accept_channel => tcp_accept_channel
             )
-  notifies :restart, "service[ganglia-monitor]"
+  notifies :restart, "service[ganglia-monitor]", :delayed
 end
 
 service "ganglia-monitor" do

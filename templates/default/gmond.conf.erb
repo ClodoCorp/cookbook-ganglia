@@ -118,9 +118,7 @@ modules {
     params = "/usr/lib/ganglia/python_modules"
   }
 }
-<% node[:monitoring][:metric_list].each do |mod| -%>
-include ('/etc/ganglia/conf.d/<%= mod %>.conf')
-<% end -%>
+include ('/etc/ganglia/custom.d/*.conf')
 
 /* The old internal 2.5.x metric array has been replaced by the following
    collection_group directives. What follows is the default behavior for
