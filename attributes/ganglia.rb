@@ -6,6 +6,7 @@ default[:ganglia][:web_uri] = "http://sourceforge.net/projects/ganglia/files/gan
 default[:ganglia][:web_checksum] = "cd6948d4"
 default[:ganglia][:cluster_name] = "default"
 default[:ganglia][:unicast] = false
+default[:ganglia][:setuid] = "yes"
 default[:ganglia][:server_role] = "ganglia"
 default[:ganglia][:graphite_host] = "localhost"
 default[:ganglia][:mute] = "no"

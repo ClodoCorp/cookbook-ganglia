@@ -2,7 +2,7 @@
    The values closely match ./gmond/metric.h definitions in 2.5.x */
 globals {
   daemonize = yes
-  setuid = yes
+  setuid = <%= node[:ganglia][:setuid] %>
   user = ganglia
   debug_level = 0
   max_udp_msg_len = 1472
