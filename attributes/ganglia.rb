@@ -33,4 +33,4 @@ default[:ganglia][:carbon][:port] = "2003"
 default[:ganglia][:carbon][:protocol] = "udp"
 default[:ganglia][:carbon][:timeout] = 500
 default[:ganglia][:carbon][:graphite_path] = ""
-
+default[:ganglia][:clusters_options][:check_ip_exist] = true
