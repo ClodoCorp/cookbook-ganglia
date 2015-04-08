@@ -16,7 +16,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 #
-
+require "ipaddr"
 case node[:platform_family]
 when "debian"
   package "ganglia-monitor"
@@ -42,18 +42,22 @@ node[:network][:interfaces].each_value do |iface|
   end
 end
 
-
 node[:ganglia][:clusters].each do |cluster|
 
-  bind_addr = Array.new()
+  bind_addr = Hash.new()
   cluster[:collector].each do |addr|
-    if local_addresses.include?(addr)
-      bind_addr.push(addr)
+    if node[:ganglia][:clusters_options][:check_ip_exist] == false or local_addresses.include?(addr)
+      ipaddr = IPAddr.new addr
+      if ipaddr.ipv4?
+        bind_addr[addr] = "inet4"
+      elsif ipaddr.ipv6?
+        bind_addr[addr] = "inet6"
+      end
     end
   end
 
   service "gmond-#{cluster[:name]}"
-  
+
   template "/etc/ganglia/gmond-#{cluster[:name]}.conf" do
     source "cluster.gmond.conf.erb"
     variables( :cluster_name => cluster[:name],
