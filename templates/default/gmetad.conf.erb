@@ -67,9 +67,7 @@ data_source "<%= c[:name] %>" <%= c[:collector] %>
 # The name of this Grid. All the data sources above will be wrapped in a GRID
 # tag with this name.
 # default: unspecified
-<% @grid_name.each do |grid| -%>
 gridname "<%= @grid_name -%>"
-<%end -%>
 #
 #-------------------------------------------------------------------------------
 # The authority URL for this grid. Used by other gmetads to locate graphs
