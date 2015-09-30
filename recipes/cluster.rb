@@ -42,40 +42,42 @@ node[:network][:interfaces].each_value do |iface|
   end
 end
 
-node[:ganglia][:clusters].each do |cluster|
+if node[:ganglia][:clusters] then
+  node[:ganglia][:clusters].each do |cluster|
 
-  bind_addr = Hash.new()
-  cluster[:collector].each do |addr|
-    if node[:ganglia][:clusters_options][:check_ip_exist] == false or local_addresses.include?(addr)
-      ipaddr = IPAddr.new addr
-      if ipaddr.ipv4?
-        bind_addr[addr] = "inet4"
-      elsif ipaddr.ipv6?
-        bind_addr[addr] = "inet6"
+    bind_addr = Hash.new()
+    cluster[:collector].each do |addr|
+      if node[:ganglia][:clusters_options][:check_ip_exist] == false or local_addresses.include?(addr)
+        ipaddr = IPAddr.new addr
+        if ipaddr.ipv4?
+          bind_addr[addr] = "inet4"
+        elsif ipaddr.ipv6?
+          bind_addr[addr] = "inet6"
+        end
       end
     end
+
+    service "gmond-#{cluster[:name]}"
+
+    template "/etc/ganglia/gmond-#{cluster[:name]}.conf" do
+      source "cluster.gmond.conf.erb"
+      variables( :cluster_name => cluster[:name],
+                 :bind_addr =>  bind_addr,
+                 :grid_name => node[:ganglia][:grid_name]
+                )
+      notifies :restart, "service[gmond-#{cluster[:name]}]", :delayed
+    end
+
+    template "/etc/init.d/gmond-#{cluster[:name]}" do
+      source "init.gmond.erb"
+      mode  "0755"
+      variables( :cluster_name => cluster[:name],
+                 :instance_name => "gmond-#{cluster[:name]}" )
+    end
+
+    service  "gmond-#{cluster[:name]}" do
+      action [:enable, :start]
+    end
+
   end
-
-  service "gmond-#{cluster[:name]}"
-
-  template "/etc/ganglia/gmond-#{cluster[:name]}.conf" do
-    source "cluster.gmond.conf.erb"
-    variables( :cluster_name => cluster[:name],
-               :bind_addr =>  bind_addr,
-               :grid_name => node[:ganglia][:grid_name]
-              )
-    notifies :restart, "service[gmond-#{cluster[:name]}]", :delayed
-  end
-
-  template "/etc/init.d/gmond-#{cluster[:name]}" do
-    source "init.gmond.erb"
-    mode  "0755"
-    variables( :cluster_name => cluster[:name],
-               :instance_name => "gmond-#{cluster[:name]}" )
-  end
-
-  service  "gmond-#{cluster[:name]}" do
-    action [:enable, :start]
-  end
-
 end
